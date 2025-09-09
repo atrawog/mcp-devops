@@ -44,7 +44,10 @@ RUN pacman -Syu --noconfirm && \
     wayland-utils \
     net-tools \
     iproute2 \
-    shadow
+    shadow \
+    wofi \
+    waybar \
+    ttf-font-awesome
 
 # Create jovian user with specific UID/GID for proper workspace mapping
 RUN groupadd --gid ${USER_GID} jovian && \
@@ -74,6 +77,8 @@ USER root
 # Configure runtime directories
 RUN mkdir -p /home/jovian/.config/wayvnc \
              /home/jovian/.config/sway \
+             /home/jovian/.config/wofi \
+             /home/jovian/.config/waybar \
              /tmp/runtime-jovian && \
     chown -R ${USER_UID}:${USER_GID} /home/jovian/.config && \
     chown ${USER_UID}:${USER_GID} /tmp/runtime-jovian && \
@@ -108,6 +113,19 @@ RUN chown ${USER_UID}:${USER_GID} /home/jovian/.config/sway/config
 # Copy wayvnc configuration
 COPY config/wayvnc/config /home/jovian/.config/wayvnc/config
 RUN chown ${USER_UID}:${USER_GID} /home/jovian/.config/wayvnc/config
+
+# Copy wofi configuration
+COPY config/wofi/ /home/jovian/.config/wofi/
+RUN chown -R ${USER_UID}:${USER_GID} /home/jovian/.config/wofi
+
+# Copy waybar configuration
+COPY config/waybar/ /home/jovian/.config/waybar/
+RUN chown -R ${USER_UID}:${USER_GID} /home/jovian/.config/waybar
+
+# Copy desktop entries for applications
+RUN mkdir -p /home/jovian/.local/share/applications
+COPY config/applications/*.desktop /home/jovian/.local/share/applications/
+RUN chown -R ${USER_UID}:${USER_GID} /home/jovian/.local/share/applications
 
 # Copy and setup entrypoint script
 COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

@@ -22,10 +22,18 @@ client.unfocused        #24283b #24283b #a9b1d6 #24283b
 # Keybindings
 set $mod Mod4
 bindsym $mod+Return exec foot
-bindsym $mod+d exec google-chrome-stable --no-sandbox
+bindsym $mod+d exec $launcher
+bindsym $mod+Shift+d exec wofi --show run
+bindsym $mod+c exec google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+e exec swaynag -t warning -m "Exit Sway?" -B "Yes" "swaymsg exit"
 bindsym $mod+Shift+r reload
+
+# Mouse bindings - right click on desktop for launcher
+# Set environment for wofi to find applications
+set $launcher XDG_DATA_DIRS=/usr/share:/home/jovian/.local/share XDG_DATA_HOME=/home/jovian/.local/share wofi --show drun
+bindsym --release button3 exec $launcher
+bindsym --whole-window --release button3 exec $launcher
 
 # Focus
 bindsym $mod+h focus left

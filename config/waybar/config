@@ -1,0 +1,62 @@
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 30,
+    "spacing": 4,
+    "modules-left": ["custom/launcher", "custom/terminal", "custom/chrome", "sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["cpu", "memory", "clock"],
+    
+    "custom/launcher": {
+        "format": " ",
+        "on-click": "wofi --show drun",
+        "on-click-right": "wofi --show run",
+        "tooltip": false
+    },
+    
+    "custom/terminal": {
+        "format": " ",
+        "on-click": "foot",
+        "tooltip-format": "Terminal"
+    },
+    
+    "custom/chrome": {
+        "format": " ",
+        "on-click": "google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox",
+        "tooltip-format": "Google Chrome"
+    },
+    
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}",
+        "format-icons": {
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
+    },
+    
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    
+    "sway/window": {
+        "max-length": 50
+    },
+    
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%H:%M}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": false
+    },
+    
+    "memory": {
+        "format": " {}%"
+    }
+}

@@ -20,6 +20,7 @@ just up
 - **Compositor**: Sway (Wayland) in headless mode
 - **VNC**: wayvnc for KRDC-compatible remote access
 - **Browser**: Google Chrome (installed from AUR)
+- **Launcher**: wofi (app launcher) and waybar (taskbar)
 - **Task Runner**: just
 - **Default User**: jovian (UID/GID mapped from host)
 
@@ -32,7 +33,10 @@ mcp-devops/
 │   │   ├── sway/           # Sway compositor service
 │   │   └── wayvnc/         # VNC server service
 │   ├── sway/               # Sway window manager config
-│   └── wayvnc/             # VNC server config
+│   ├── wayvnc/             # VNC server config
+│   ├── wofi/               # App launcher config and styles
+│   ├── waybar/             # Taskbar config and styles
+│   └── applications/       # Desktop entries for launcher
 ├── scripts/
 │   └── docker-entrypoint.sh # Container entrypoint
 ├── .devcontainer/
@@ -95,6 +99,16 @@ just clean                  # Remove container and image
 2. Create new VNC connection to `localhost:5900`
 3. No authentication required (default)
 4. You'll see Sway desktop with terminal and Chrome
+
+### Desktop Features
+- **Launcher**: Right-click anywhere on desktop to open app launcher (wofi)
+- **Taskbar**: Bottom bar with app launchers and system info (waybar)
+- **Quick Launch**: Click icons in taskbar for Terminal and Chrome
+- **Keyboard Shortcuts**:
+  - `Mod4+d`: Open app launcher
+  - `Mod4+Return`: Open terminal
+  - `Mod4+c`: Open Chrome
+  - `Mod4+Shift+q`: Close window
 
 ### Connecting with other VNC clients
 Any VNC client supporting the RFB protocol should work:

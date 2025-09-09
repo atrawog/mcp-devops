@@ -1,0 +1,100 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "Font Awesome 6 Free", "Liberation Sans", sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: rgba(26, 27, 38, 0.9);
+    color: #a9b1d6;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#custom-launcher,
+#custom-terminal,
+#custom-chrome,
+#workspaces,
+#mode,
+#window,
+#clock,
+#cpu,
+#memory {
+    padding: 0 10px;
+    margin: 0 4px;
+    color: #a9b1d6;
+}
+
+#custom-launcher {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#custom-launcher:hover {
+    background-color: #7dcfff;
+}
+
+#custom-terminal,
+#custom-chrome {
+    background-color: #414868;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#custom-terminal:hover,
+#custom-chrome:hover {
+    background-color: #565f89;
+}
+
+#workspaces button {
+    padding: 0 10px;
+    background-color: transparent;
+    color: #a9b1d6;
+    border-radius: 5px;
+    margin: 0 2px;
+}
+
+#workspaces button:hover {
+    background-color: #414868;
+}
+
+#workspaces button.focused {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+#workspaces button.urgent {
+    background-color: #f7768e;
+    color: #1a1b26;
+}
+
+#window {
+    color: #7dcfff;
+}
+
+#clock {
+    background-color: #24283b;
+    border-radius: 5px;
+}
+
+#cpu {
+    background-color: #9ece6a;
+    color: #1a1b26;
+    border-radius: 5px;
+}
+
+#memory {
+    background-color: #bb9af7;
+    color: #1a1b26;
+    border-radius: 5px;
+}
+
+tooltip {
+    background-color: #1a1b26;
+    border: 1px solid #7aa2f7;
+    border-radius: 5px;
+}
