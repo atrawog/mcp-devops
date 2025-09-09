@@ -1,0 +1,52 @@
+# MCP DevOps Sway Configuration
+# Output configuration
+output HEADLESS-1 {
+    mode 1920x1080@60Hz
+    bg #1a1b26 solid_color
+}
+
+# Default applications
+exec foot --title=Terminal
+exec google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox
+
+# Window rules
+default_border pixel 2
+gaps inner 10
+smart_gaps on
+
+# Colors
+client.focused          #7aa2f7 #7aa2f7 #1a1b26 #7dcfff
+client.focused_inactive #414868 #414868 #a9b1d6 #414868
+client.unfocused        #24283b #24283b #a9b1d6 #24283b
+
+# Keybindings
+set $mod Mod4
+bindsym $mod+Return exec foot
+bindsym $mod+d exec google-chrome-stable --no-sandbox
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+e exec swaynag -t warning -m "Exit Sway?" -B "Yes" "swaymsg exit"
+bindsym $mod+Shift+r reload
+
+# Focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move windows
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Workspaces
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+
+# Container layout
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen toggle

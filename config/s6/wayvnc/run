@@ -1,0 +1,19 @@
+#!/command/with-contenv bash
+export XDG_RUNTIME_DIR=/tmp/runtime-jovian
+export HOME=/home/jovian
+export WAYLAND_DISPLAY=wayland-1
+# Wait for Sway to fully initialize
+sleep 5
+# Check if Wayland socket exists
+count=0
+while [ ! -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do
+    echo "Waiting for Wayland socket..."
+    sleep 1
+    count=$((count + 1))
+    if [ $count -gt 30 ]; then
+        echo "Timeout waiting for Wayland socket"
+        exit 1
+    fi
+done
+echo "Starting wayvnc on HEADLESS-1"
+exec s6-setuidgid jovian wayvnc --config=/home/jovian/.config/wayvnc/config 0.0.0.0 5900

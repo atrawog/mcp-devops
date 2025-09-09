@@ -1,0 +1,77 @@
+{
+  "name": "MCP DevOps",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "..",
+    "args": {
+      "USER_UID": "${localEnv:USER_UID:-1000}",
+      "USER_GID": "${localEnv:USER_GID:-1000}"
+    }
+  },
+  "runArgs": [
+    "--hostname=mcp-devops",
+    "--cap-add=SYS_PTRACE",
+    "--security-opt", "seccomp=unconfined",
+    "--shm-size=2g",
+    "--user", "${localEnv:USER_UID:-1000}:${localEnv:USER_GID:-1000}"
+  ],
+  "forwardPorts": [5900],
+  "portsAttributes": {
+    "5900": {
+      "label": "VNC",
+      "onAutoForward": "notify",
+      "protocol": "tcp"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "kokakiwi.vscode-just",
+        "ms-vscode.makefile-tools",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "remote.autoForwardPorts": true,
+        "remote.containers.defaultExtensions": [
+          "kokakiwi.vscode-just"
+        ],
+        "files.watcherExclude": {
+          "**/target/**": true
+        }
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": false
+    }
+  },
+  "postCreateCommand": "",
+  "postStartCommand": "/init",
+  "remoteUser": "jovian",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+  ],
+  "initializeCommand": "echo 'Starting MCP DevOps container with UID='$(id -u)",
+  "updateContentCommand": "sudo pacman -Syu --noconfirm",
+  "containerEnv": {
+    "PROJECT_NAME": "mcp-devops",
+    "DISPLAY": ":0",
+    "WLR_BACKENDS": "headless",
+    "WLR_LIBINPUT_NO_DEVICES": "1",
+    "XDG_RUNTIME_DIR": "/tmp/runtime-jovian",
+    "WAYLAND_DISPLAY": "wayland-1"
+  },
+  "containerUser": "jovian",
+  "updateRemoteUserUID": true
+}
