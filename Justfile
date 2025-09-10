@@ -123,3 +123,11 @@ test-vnc:
     @nc -zv localhost {{vnc_port}} 2>&1 | grep -q succeeded && \
         echo "✓ VNC port {{vnc_port}} is accessible" || \
         echo "✗ VNC port {{vnc_port}} is not accessible"
+
+# Fix Docker permissions if lost
+fix-docker:
+    @./scripts/fix-docker-permissions.sh
+
+# Verify Docker permissions in devcontainer
+verify-docker:
+    @./scripts/verify-docker-permissions.sh

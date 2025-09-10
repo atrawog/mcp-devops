@@ -1,5 +1,8 @@
-#!/command/execlineb -P
-foreground { echo "Setting up runtime directory and permissions..." }
-foreground { mkdir -p /tmp/runtime-jovian }
-foreground { chown -R jovian:jovian /tmp/runtime-jovian /workspace /home/jovian }
+#!/bin/bash
+# Setup workspace and runtime directory
+
+echo "Setting up runtime directory..."
+mkdir -p /tmp/runtime-jovian
+chown jovian:jovian /tmp/runtime-jovian
 chmod 700 /tmp/runtime-jovian
+echo "Runtime directory setup complete"

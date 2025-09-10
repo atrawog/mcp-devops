@@ -1,0 +1,16 @@
+#!/bin/bash
+# Fix Docker socket permissions at startup
+
+echo "[docker-fix] Starting Docker permission sync service"
+
+# Run the sync script if Docker socket is mounted
+if [ -e /var/run/docker.sock ]; then
+    echo "[docker-fix] Docker socket detected at /var/run/docker.sock"
+    echo "[docker-fix] Running sync-docker-gid.sh..."
+    /usr/local/bin/sync-docker-gid.sh
+    echo "[docker-fix] Sync script completed"
+else
+    echo "[docker-fix] No Docker socket mounted, skipping Docker setup"
+fi
+
+echo "[docker-fix] Service completed"

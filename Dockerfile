@@ -13,7 +13,8 @@ LABEL org.opencontainers.image.title="MCP DevOps" \
       org.opencontainers.image.description="Development container for MCP DevOps" \
       org.opencontainers.image.vendor="MCP DevOps Team"
 
-# Arguments for UID/GID mapping
+# Default UID/GID for jovian user
+# Dev Containers will handle UID remapping via updateRemoteUserUID
 ARG USER_UID=1000
 ARG USER_GID=1000
 
@@ -25,12 +26,15 @@ RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
     tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
     rm /tmp/*.tar.xz
 
-# System packages
+# System packages including Docker and Docker Compose
 RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm \
     base-devel \
     git \
     sudo \
+    docker \
+    docker-compose \
+    docker-buildx \
     sway \
     wayvnc \
     xorg-xwayland \
@@ -52,10 +56,11 @@ RUN pacman -Syu --noconfirm && \
     librsvg \
     adwaita-icon-theme
 
-# Create jovian user with specific UID/GID for proper workspace mapping
+# Create jovian user with default UID/GID
+# DevContainers will automatically sync UID/GID via updateRemoteUserUID
 RUN groupadd --gid ${USER_GID} jovian && \
     useradd --uid ${USER_UID} --gid ${USER_GID} -m -s /bin/bash jovian && \
-    usermod -aG wheel jovian && \
+    usermod -aG wheel,docker jovian && \
     echo "jovian ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/jovian && \
     chmod 0440 /etc/sudoers.d/jovian
 
@@ -94,24 +99,30 @@ RUN mkdir -p /home/jovian/.config/wayvnc \
 
 # Setup s6 service structure
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d \
+             /etc/s6-overlay/s6-rc.d/docker-fix/dependencies.d \
              /etc/s6-overlay/s6-rc.d/sway/dependencies.d \
              /etc/s6-overlay/s6-rc.d/wayvnc/dependencies.d
 
 # Copy s6 service configurations
 COPY config/s6/workspace-fix /etc/s6-overlay/s6-rc.d/workspace-fix
+COPY config/s6/docker-fix /etc/s6-overlay/s6-rc.d/docker-fix
 COPY config/s6/sway /etc/s6-overlay/s6-rc.d/sway
 COPY config/s6/wayvnc /etc/s6-overlay/s6-rc.d/wayvnc
 
 # Set execute permissions for s6 service scripts
 RUN chmod +x /etc/s6-overlay/s6-rc.d/workspace-fix/up \
+             /etc/s6-overlay/s6-rc.d/docker-fix/up \
              /etc/s6-overlay/s6-rc.d/sway/run \
              /etc/s6-overlay/s6-rc.d/wayvnc/run
 
 # Configure s6 service dependencies
 RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/workspace-fix \
+          /etc/s6-overlay/s6-rc.d/user/contents.d/docker-fix \
           /etc/s6-overlay/s6-rc.d/user/contents.d/sway \
           /etc/s6-overlay/s6-rc.d/user/contents.d/wayvnc \
+          /etc/s6-overlay/s6-rc.d/docker-fix/dependencies.d/workspace-fix \
           /etc/s6-overlay/s6-rc.d/sway/dependencies.d/workspace-fix \
+          /etc/s6-overlay/s6-rc.d/sway/dependencies.d/docker-fix \
           /etc/s6-overlay/s6-rc.d/wayvnc/dependencies.d/sway
 
 # Copy Sway configuration
@@ -139,7 +150,8 @@ RUN chown -R ${USER_UID}:${USER_GID} /home/jovian/.local/share/applications
 COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY scripts/launcher.sh /usr/local/bin/launcher.sh
 COPY scripts/launcher-strict.sh /usr/local/bin/launcher-strict.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh /usr/local/bin/launcher.sh /usr/local/bin/launcher-strict.sh && \
+COPY scripts/sync-docker-gid.sh /usr/local/bin/sync-docker-gid.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /usr/local/bin/launcher.sh /usr/local/bin/launcher-strict.sh /usr/local/bin/sync-docker-gid.sh && \
     chown root:root /usr/local/bin/*.sh
 
 # Environment

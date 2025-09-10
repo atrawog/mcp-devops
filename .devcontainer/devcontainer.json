@@ -2,18 +2,17 @@
   "name": "MCP DevOps",
   "build": {
     "dockerfile": "../Dockerfile",
-    "context": "..",
-    "args": {
-      "USER_UID": "${localEnv:USER_UID:-1000}",
-      "USER_GID": "${localEnv:USER_GID:-1000}"
-    }
+    "context": ".."
+    // Build args removed - Dockerfile uses default UID/GID 1000
+    // updateRemoteUserUID will handle runtime UID sync
   },
   "runArgs": [
     "--hostname=mcp-devops",
+    "--privileged",
     "--cap-add=SYS_PTRACE",
     "--security-opt", "seccomp=unconfined",
-    "--shm-size=2g",
-    "--user", "${localEnv:USER_UID:-1000}:${localEnv:USER_GID:-1000}"
+    "--shm-size=2g"
+    // Removed --user flag - not needed with updateRemoteUserUID
   ],
   "forwardPorts": [5900],
   "portsAttributes": {
@@ -34,44 +33,48 @@
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "remote.autoForwardPorts": true,
-        "remote.containers.defaultExtensions": [
-          "kokakiwi.vscode-just"
-        ],
         "files.watcherExclude": {
           "**/target/**": true
         }
       }
     }
   },
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest",
-      "moby": true,
-      "dockerDashComposeVersion": "v2"
-    },
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "latest",
-      "ppa": false
-    }
-  },
-  "postCreateCommand": "",
-  "postStartCommand": "/init",
+  // Features removed - incompatible with Arch Linux
+  // Docker and git are installed directly in the Dockerfile instead
+  // Lifecycle commands
+  "onCreateCommand": "echo 'Container created successfully'",
+  "updateContentCommand": "sudo pacman -Syu --noconfirm",
+  "postCreateCommand": "sudo chown -R jovian:jovian /workspace /home/jovian/.config 2>/dev/null || true",
+  "postStartCommand": "sudo /usr/local/bin/sync-docker-gid.sh && echo 'DevContainer ready!'",
+  "postAttachCommand": "echo 'Welcome to MCP DevOps DevContainer'",
+  
+  // User configuration following Dev Container spec
   "remoteUser": "jovian",
+  "updateRemoteUserUID": true,
+  // containerUser removed (deprecated - remoteUser is used instead)
+  
+  // Workspace configuration
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  
+  // Additional mounts
   "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+    // Mount Docker socket for Docker outside of Docker (safer than Docker-in-Docker)
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
   ],
-  "initializeCommand": "echo 'Starting MCP DevOps container with UID='$(id -u)",
-  "updateContentCommand": "sudo pacman -Syu --noconfirm",
+  
+  // Environment variables
   "containerEnv": {
     "PROJECT_NAME": "mcp-devops",
     "DISPLAY": ":0",
     "WLR_BACKENDS": "headless",
     "WLR_LIBINPUT_NO_DEVICES": "1",
+    "WLR_SEAT": "seat0",
     "XDG_RUNTIME_DIR": "/tmp/runtime-jovian",
-    "WAYLAND_DISPLAY": "wayland-1"
+    "WAYLAND_DISPLAY": "wayland-1",
+    "VNC_PASSWORD": "mcp-devops"
   },
-  "containerUser": "jovian",
-  "updateRemoteUserUID": true
+  
+  // Override the default command to use s6-init
+  "overrideCommand": false
 }
