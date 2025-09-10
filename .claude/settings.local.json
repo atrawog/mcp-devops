@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(docker logs:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "WebFetch(domain:pixi.sh)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

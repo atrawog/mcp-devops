@@ -42,6 +42,7 @@ RUN pacman -Syu --noconfirm && \
     ttf-liberation \
     foot \
     just \
+    pixi \
     neovim \
     openssh \
     rsync \
