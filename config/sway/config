@@ -5,9 +5,8 @@ output HEADLESS-1 {
     bg #1a1b26 solid_color
 }
 
-# Default applications
+# Default applications - only Terminal auto-launches
 exec foot --title=Terminal
-exec google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox
 
 # Window rules
 default_border pixel 2
@@ -29,11 +28,41 @@ bindsym $mod+Shift+q kill
 bindsym $mod+Shift+e exec swaynag -t warning -m "Exit Sway?" -B "Yes" "swaymsg exit"
 bindsym $mod+Shift+r reload
 
-# Mouse bindings - right click on desktop for launcher
-# Set environment for wofi to find applications
-set $launcher XDG_DATA_DIRS=/usr/share:/home/jovian/.local/share XDG_DATA_HOME=/home/jovian/.local/share wofi --show drun
-bindsym --release button3 exec $launcher
-bindsym --whole-window --release button3 exec $launcher
+# Configure virtual pointer device for proper event handling
+input "type:pointer" {
+    accel_profile flat
+    pointer_accel 0
+}
+
+input "0:0:wlr_virtual_pointer_v1" {
+    tap enabled
+    tap_button_map lrm
+}
+
+# Seat configuration for better input handling
+seat seat0 {
+    xcursor_theme default 24
+    hide_cursor when-typing disable
+}
+
+# Launcher configuration
+set $launcher exec /usr/local/bin/launcher-strict.sh
+
+# Mouse bindings for launcher
+# Use multiple binding methods to ensure capture
+bindsym --whole-window button3 $launcher
+bindsym --whole-window --release button3 $launcher
+bindcode 273 $launcher
+
+# For root window clicks (most important)
+bindsym button3 $launcher
+
+# Modifier+click as fallback
+bindsym Mod1+button3 $launcher
+bindsym Mod4+button3 $launcher
+
+# Floating modifier for window movement
+floating_modifier Mod4
 
 # Focus
 bindsym $mod+h focus left

@@ -1,20 +1,8 @@
 [Desktop Entry]
-Version=1.0
-Name=Google Chrome
-Comment=Access the Internet
-Exec=google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox %U
-StartupNotify=true
-Terminal=false
-Icon=google-chrome
 Type=Application
+Name=Google Chrome
+Comment=Browse the Web
+Icon=google-chrome
+Exec=google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox
+Terminal=false
 Categories=Network;WebBrowser;
-MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;
-Actions=new-window;new-private-window;
-
-[Desktop Action new-window]
-Name=New Window
-Exec=google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox --new-window
-
-[Desktop Action new-private-window]
-Name=New Incognito Window
-Exec=google-chrome-stable --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox --incognito

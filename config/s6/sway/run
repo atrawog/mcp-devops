@@ -4,9 +4,13 @@ export HOME=/home/jovian
 export WLR_BACKENDS=headless
 export WLR_LIBINPUT_NO_DEVICES=1
 export WAYLAND_DISPLAY=wayland-1
+# Add this to help with input handling
+export WLR_SEAT=seat0
+
 # Ensure runtime dir exists and has correct permissions
 mkdir -p $XDG_RUNTIME_DIR
 chown jovian:jovian $XDG_RUNTIME_DIR
 chmod 700 $XDG_RUNTIME_DIR
-echo "Starting Sway as jovian user"
+
+echo "Starting Sway with seat configuration"
 exec s6-setuidgid jovian sway --unsupported-gpu -V

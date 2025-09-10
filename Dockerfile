@@ -47,7 +47,10 @@ RUN pacman -Syu --noconfirm && \
     shadow \
     wofi \
     waybar \
-    ttf-font-awesome
+    ttf-font-awesome \
+    gdk-pixbuf2 \
+    librsvg \
+    adwaita-icon-theme
 
 # Create jovian user with specific UID/GID for proper workspace mapping
 RUN groupadd --gid ${USER_GID} jovian && \
@@ -73,6 +76,11 @@ RUN git clone https://aur.archlinux.org/yay.git && \
 RUN yay -S --noconfirm google-chrome
 
 USER root
+
+# Update gdk-pixbuf cache and icon cache for wofi
+RUN gdk-pixbuf-query-loaders --update-cache && \
+    gtk-update-icon-cache -f /usr/share/icons/Adwaita/ 2>/dev/null || true && \
+    gtk-update-icon-cache -f /usr/share/icons/hicolor/ 2>/dev/null || true
 
 # Configure runtime directories
 RUN mkdir -p /home/jovian/.config/wayvnc \
@@ -127,9 +135,12 @@ RUN mkdir -p /home/jovian/.local/share/applications
 COPY config/applications/*.desktop /home/jovian/.local/share/applications/
 RUN chown -R ${USER_UID}:${USER_GID} /home/jovian/.local/share/applications
 
-# Copy and setup entrypoint script
+# Copy and setup scripts
 COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY scripts/launcher.sh /usr/local/bin/launcher.sh
+COPY scripts/launcher-strict.sh /usr/local/bin/launcher-strict.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /usr/local/bin/launcher.sh /usr/local/bin/launcher-strict.sh && \
+    chown root:root /usr/local/bin/*.sh
 
 # Environment
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=30000 \

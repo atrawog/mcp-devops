@@ -2,8 +2,10 @@
 export XDG_RUNTIME_DIR=/tmp/runtime-jovian
 export HOME=/home/jovian
 export WAYLAND_DISPLAY=wayland-1
+
 # Wait for Sway to fully initialize
 sleep 5
+
 # Check if Wayland socket exists
 count=0
 while [ ! -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do
@@ -15,5 +17,10 @@ while [ ! -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do
         exit 1
     fi
 done
-echo "Starting wayvnc on HEADLESS-1"
-exec s6-setuidgid jovian wayvnc --config=/home/jovian/.config/wayvnc/config 0.0.0.0 5900
+
+echo "Starting wayvnc with transient seat"
+exec s6-setuidgid jovian wayvnc \
+    --config=/home/jovian/.config/wayvnc/config \
+    --seat=seat0 \
+    --render-cursor \
+    0.0.0.0 5900
