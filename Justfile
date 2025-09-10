@@ -131,3 +131,7 @@ fix-docker:
 # Verify Docker permissions in devcontainer
 verify-docker:
     @./scripts/verify-docker-permissions.sh
+
+# Test development tools (just and pixi)
+test-devtools:
+    @./scripts/test-devtools.sh

@@ -36,7 +36,8 @@ just up
 - **Browser**: Google Chrome (installed from AUR)
 - **Launcher**: wofi (filtered to show only Terminal and Chrome)
 - **Terminal**: foot (auto-starts on container launch)
-- **Task Runner**: just
+- **Task Runner**: just (v1.42.4) - command runner for project automation
+- **Package Manager**: pixi (v0.54.2) - conda-ecosystem package management for Python, R, C++, etc.
 - **Default User**: jovian (UID/GID mapped from host)
 
 ### Directory Structure
@@ -203,6 +204,37 @@ The `.devcontainer/devcontainer.json` follows the official [Dev Container specif
 
 ### Workspace Persistence
 The current directory is mounted at `/workspace` with automatic ownership management through Dev Container's `updateRemoteUserUID` feature.
+
+### Development Tools
+
+#### just - Task Runner
+The container includes `just` (v1.42.4) for task automation. Use it to run predefined tasks:
+```bash
+# List available tasks
+just --list
+
+# Run a specific task
+just build
+just test
+```
+
+#### pixi - Package Manager
+The container includes `pixi` (v0.54.2), a cross-platform package manager built on the conda ecosystem:
+```bash
+# Initialize a new project
+pixi init my-project
+
+# Add dependencies
+pixi add python numpy pandas
+
+# Install packages from pixi.toml
+pixi install
+
+# Run commands in pixi environment
+pixi run python script.py
+```
+
+Pixi supports multiple languages including Python, R, C++, Rust, and more. It provides reproducible environments across different platforms.
 
 ## Known Limitations
 
