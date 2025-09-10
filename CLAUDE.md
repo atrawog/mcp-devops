@@ -38,6 +38,7 @@ just up
 - **Terminal**: foot (auto-starts on container launch)
 - **Task Runner**: just (v1.42.4) - command runner for project automation
 - **Package Manager**: pixi (v0.54.2) - conda-ecosystem package management for Python, R, C++, etc.
+- **IaC Tool**: terraform (v1.13.2) - infrastructure as code provisioning
 - **Default User**: jovian (UID/GID mapped from host)
 
 ### Directory Structure
@@ -235,6 +236,30 @@ pixi run python script.py
 ```
 
 Pixi supports multiple languages including Python, R, C++, Rust, and more. It provides reproducible environments across different platforms.
+
+#### terraform - Infrastructure as Code
+The container includes `terraform` (v1.13.2) for infrastructure provisioning and management:
+```bash
+# Initialize a new Terraform working directory
+terraform init
+
+# Create an execution plan
+terraform plan
+
+# Apply the changes required to reach the desired state
+terraform apply
+
+# Destroy infrastructure
+terraform destroy
+
+# Format terraform files
+terraform fmt
+
+# Validate terraform configuration
+terraform validate
+```
+
+Terraform enables you to safely and predictably create, change, and improve infrastructure. It works with all major cloud providers (AWS, Azure, GCP, etc.).
 
 ## Known Limitations
 

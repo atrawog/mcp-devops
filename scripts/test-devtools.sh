@@ -23,22 +23,24 @@ docker run --rm mcp-devops:latest bash -c '
     pixi --version
     echo ""
     
-    echo "3. Testing as jovian user:"
+    echo "3. Terraform (IaC Tool):"
+    terraform --version
+    echo ""
+    
+    echo "4. Testing as jovian user:"
     su - jovian -c "
         echo \"  just: $(just --version)\"
         echo \"  pixi: $(pixi --version)\"
+        echo \"  terraform: $(terraform --version | head -1)\"
     "
-    echo ""
-    
-    echo "4. Checking pixi features:"
-    pixi --help | head -5
     echo ""
     
     echo "5. Available commands:"
     echo "  just: $(which just)"
     echo "  pixi: $(which pixi)"
+    echo "  terraform: $(which terraform)"
 '
 
 echo ""
 echo "=== Test Complete ==="
-echo "Both just and pixi are installed and accessible to all users."
+echo "Development tools (just, pixi, terraform) are installed and accessible to all users."

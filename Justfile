@@ -132,6 +132,10 @@ fix-docker:
 verify-docker:
     @./scripts/verify-docker-permissions.sh
 
-# Test development tools (just and pixi)
+# Test development tools (just, pixi, terraform)
 test-devtools:
     @./scripts/test-devtools.sh
+
+# Comprehensive verification of all tools
+verify-tools:
+    @./scripts/verify-all-tools.sh
