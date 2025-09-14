@@ -44,6 +44,8 @@ RUN pacman -Syu --noconfirm && \
     just \
     pixi \
     opentofu \
+    nodejs \
+    npm \
     neovim \
     openssh \
     rsync \
@@ -82,6 +84,12 @@ RUN git clone https://aur.archlinux.org/yay.git && \
 # Install Chrome from AUR
 RUN yay -S --noconfirm google-chrome
 
+# Configure npm and install Claude CLI as jovian user
+RUN source ~/.bashrc && \
+    npm config set prefix ~/.npm-global && \
+    npm install -g @anthropic-ai/claude-code && \
+    npm list -g --depth=0 > ~/npm-global-packages.txt
+
 USER root
 
 # Update gdk-pixbuf cache and icon cache for wofi
@@ -94,10 +102,17 @@ RUN mkdir -p /home/jovian/.config/wayvnc \
              /home/jovian/.config/sway \
              /home/jovian/.config/wofi \
              /home/jovian/.config/waybar \
+             /home/jovian/.npm-global \
              /tmp/runtime-jovian && \
     chown -R ${USER_UID}:${USER_GID} /home/jovian/.config && \
+    chown -R ${USER_UID}:${USER_GID} /home/jovian/.npm-global && \
     chown ${USER_UID}:${USER_GID} /tmp/runtime-jovian && \
     chmod 700 /tmp/runtime-jovian
+
+# Copy and setup jovian's bashrc
+COPY config/bashrc/bashrc /home/jovian/.bashrc
+RUN chown ${USER_UID}:${USER_GID} /home/jovian/.bashrc && \
+    chmod 644 /home/jovian/.bashrc
 
 # Setup s6 service structure
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d \

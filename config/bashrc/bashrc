@@ -1,0 +1,60 @@
+# Jovian user bashrc configuration
+# This file is sourced when the jovian user logs in
+
+# NPM Configuration
+# Set up npm to install global packages in user space
+if [ ! -d "$HOME/.npm-global" ]; then
+    mkdir -p "$HOME/.npm-global"
+fi
+npm config set prefix "$HOME/.npm-global" 2>/dev/null
+
+# Add npm global bin to PATH
+export PATH="/home/jovian/.npm-global/bin:$PATH"
+
+# Claude CLI aliases
+alias cl='claude'
+alias clc='claude --continue'
+alias cld='claude --dangerously-skip-permissions'
+alias cldc='claude --dangerously-skip-permissions --continue'
+
+# Source system-wide bash configuration if it exists
+if [ -f /etc/bash.bashrc ]; then
+    . /etc/bash.bashrc
+fi
+
+# Set a nice prompt for the jovian user
+export PS1='[\u@\h \W]\$ '
+
+# Enable color support for ls and grep
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Set default editor
+export EDITOR=nvim
+export VISUAL=nvim
+
+# History settings
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoreboth
+
+# Append to history instead of overwriting
+shopt -s histappend
+
+# Check window size after each command
+shopt -s checkwinsize
+
+# Enable bash completion if available
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+fi
+
+# Welcome message for interactive shells
+if [[ $- == *i* ]]; then
+    echo "Welcome to MCP DevOps Container!"
+    echo "Claude CLI is available with aliases: cl, clc, cld, cldc"
+    echo "NPM global packages are installed to: ~/.npm-global"
+fi

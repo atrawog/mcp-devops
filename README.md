@@ -78,6 +78,8 @@ services:
 - **Launcher**: wofi application launcher
 
 ### Development Tools
+- **Node.js & npm** - JavaScript runtime and package manager with user-space configuration
+- **Claude Code CLI** - AI-powered development assistant with convenient aliases (cl, clc, cld, cldc)
 - **just** (v1.42.4) - Command runner for project automation
 - **pixi** (v0.54.2) - Cross-platform package management (conda ecosystem)
 - **opentofu** - Open-source infrastructure as code (Terraform fork)
@@ -143,9 +145,21 @@ just clean                # Remove container and image
 
 5. **Use development tools**:
    ```bash
+   # AI-assisted development with Claude CLI (jovian user)
+   cl "Help me write a Python function to process CSV files"
+   clc  # Continue the conversation
+
+   # Use convenient aliases
+   cld "Generate a Dockerfile for a Node.js app"  # Skip permissions
+   cldc  # Continue with skip permissions
+
    # Package management with pixi
    pixi init my-project
    pixi add python numpy pandas
+
+   # JavaScript development with npm (jovian user)
+   npm install -g typescript
+   npm list -g --depth=0
 
    # Infrastructure as code with OpenTofu
    tofu init

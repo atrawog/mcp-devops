@@ -36,6 +36,8 @@ just up
 - **Browser**: Google Chrome (installed from AUR)
 - **Launcher**: wofi (filtered to show only Terminal and Chrome)
 - **Terminal**: foot (auto-starts on container launch)
+- **JavaScript Runtime**: Node.js & npm - for JavaScript development and package management
+- **AI Assistant**: Claude Code CLI - AI-powered development assistant with convenient aliases
 - **Task Runner**: just (v1.42.4) - command runner for project automation
 - **Package Manager**: pixi (v0.54.2) - conda-ecosystem package management for Python, R, C++, etc.
 - **IaC Tool**: opentofu - open-source infrastructure as code (Terraform fork)
@@ -207,6 +209,40 @@ The `.devcontainer/devcontainer.json` follows the official [Dev Container specif
 The current directory is mounted at `/workspace` with automatic ownership management through Dev Container's `updateRemoteUserUID` feature.
 
 ### Development Tools
+
+#### Node.js & npm - JavaScript Runtime
+The container includes Node.js and npm with user-space configuration:
+```bash
+# Node.js and npm are installed system-wide
+node --version
+npm --version
+
+# npm global packages are installed to ~/.npm-global for jovian user
+npm config get prefix  # Shows /home/jovian/.npm-global
+npm list -g --depth=0  # Lists global packages
+
+# Install additional packages (as jovian user)
+npm install -g <package-name>
+```
+
+#### Claude CLI - AI Development Assistant
+The container includes Claude Code CLI with convenient aliases:
+```bash
+# Claude CLI is pre-installed globally
+claude --version
+
+# Available aliases (for jovian user):
+cl     # Short for 'claude'
+clc    # Short for 'claude --continue'
+cld    # Short for 'claude --dangerously-skip-permissions'
+cldc   # Short for 'claude --dangerously-skip-permissions --continue'
+
+# Example usage:
+cl "Help me write a function to parse JSON"
+clc    # Continue the previous conversation
+```
+
+The Claude CLI is installed via npm in the jovian user's `.npm-global` directory and is available in the PATH when logged in as jovian.
 
 #### just - Task Runner
 The container includes `just` (v1.42.4) for task automation. Use it to run predefined tasks:

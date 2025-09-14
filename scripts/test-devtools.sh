@@ -27,20 +27,44 @@ docker run --rm mcp-devops:latest bash -c '
     tofu version
     echo ""
 
-    echo "4. Testing as jovian user:"
+    echo "4. Node.js and npm:"
+    node --version
+    npm --version
+    echo ""
+
+    echo "5. Claude CLI:"
+    claude --version 2>/dev/null || echo "Claude CLI not found in system path"
+    echo ""
+
+    echo "6. Testing as jovian user:"
     su - jovian -c "
         echo \"  just: $(just --version)\"
         echo \"  pixi: $(pixi --version)\"
         echo \"  opentofu: $(tofu version 2>/dev/null | head -1 || echo 'not found')\"
+        echo \"  node: $(node --version)\"
+        echo \"  npm: $(npm --version)\"
+        echo \"  claude: $(claude --version 2>/dev/null || echo 'not found')\"
+        echo \"  Testing aliases:\"
+        echo \"    cl alias: $(type cl 2>/dev/null | head -1 || echo 'not found')\"
+        echo \"    clc alias: $(type clc 2>/dev/null | head -1 || echo 'not found')\"
+        echo \"  npm global path: $(npm config get prefix 2>/dev/null)\"
+        echo \"  PATH includes npm: $(echo \$PATH | grep -q '.npm-global' && echo 'YES' || echo 'NO')\"
     "
     echo ""
 
-    echo "5. Available commands:"
+    echo "7. Available commands:"
     echo "  just: $(which just)"
     echo "  pixi: $(which pixi)"
     echo "  opentofu: $(which tofu 2>/dev/null || which opentofu)"
+    echo "  node: $(which node)"
+    echo "  npm: $(which npm)"
 '
 
 echo ""
 echo "=== Test Complete ==="
-echo "Development tools (just, pixi, opentofu) are installed and accessible to all users."
+echo "Development tools installed and verified:"
+echo "  • just (task runner)"
+echo "  • pixi (package manager)"
+echo "  • opentofu (IaC tool)"
+echo "  • nodejs & npm (JavaScript runtime & package manager)"
+echo "  • claude (Claude CLI with aliases)"
