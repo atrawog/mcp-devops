@@ -18,6 +18,49 @@ build:
         --build-arg USER_GID={{group_id}} \
         -t {{image}} .
 
+# Push image to GitHub Container Registry
+push: build
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Variables
+    REGISTRY="ghcr.io"
+    USERNAME="atrawog"
+    IMAGE_NAME="mcp-devops"
+    COMMIT_SHA=$(git rev-parse --short HEAD)
+    VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+
+    echo "=== Pushing Docker image to GitHub Container Registry ==="
+
+    # Login to ghcr.io
+    echo "Logging in to ${REGISTRY}..."
+    if [ -n "${GITHUB_TOKEN:-}" ]; then
+        echo "$GITHUB_TOKEN" | docker login ${REGISTRY} -u ${USERNAME} --password-stdin
+    else
+        echo "Using gh CLI for authentication..."
+        gh auth token | docker login ${REGISTRY} -u ${USERNAME} --password-stdin
+    fi
+
+    # Tag images
+    echo "Tagging images..."
+    docker tag {{image}} ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:latest
+    docker tag {{image}} ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${VERSION}
+    docker tag {{image}} ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${COMMIT_SHA}
+
+    # Push images
+    echo "Pushing images to ${REGISTRY}..."
+    docker push ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:latest
+    docker push ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${VERSION}
+    docker push ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${COMMIT_SHA}
+
+    echo "✅ Successfully pushed images:"
+    echo "  - ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:latest"
+    echo "  - ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${VERSION}"
+    echo "  - ${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${COMMIT_SHA}"
+
+    echo ""
+    echo "📦 View package at: https://github.com/${USERNAME}/${IMAGE_NAME}/pkgs/container/${IMAGE_NAME}"
+
 # Run the container
 up: build
     docker run -d \

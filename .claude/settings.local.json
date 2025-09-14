@@ -4,7 +4,9 @@
       "Bash(docker logs:*)",
       "Bash(docker exec:*)",
       "WebFetch(domain:pixi.sh)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(docker:*)",
+      "Bash(just:*)"
     ],
     "deny": [],
     "ask": []

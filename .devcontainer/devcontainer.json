@@ -1,11 +1,12 @@
 {
   "name": "MCP DevOps",
-  "build": {
-    "dockerfile": "../Dockerfile",
-    "context": ".."
-    // Build args removed - Dockerfile uses default UID/GID 1000
-    // updateRemoteUserUID will handle runtime UID sync
-  },
+  "image": "ghcr.io/atrawog/mcp-devops:latest",
+  // Using pre-built image from GitHub Container Registry
+  // To build locally instead, uncomment the build section below:
+  // "build": {
+  //   "dockerfile": "../Dockerfile",
+  //   "context": ".."
+  // },
   "runArgs": [
     "--hostname=mcp-devops",
     "--privileged",
