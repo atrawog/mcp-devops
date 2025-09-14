@@ -38,7 +38,7 @@ just up
 - **Terminal**: foot (auto-starts on container launch)
 - **Task Runner**: just (v1.42.4) - command runner for project automation
 - **Package Manager**: pixi (v0.54.2) - conda-ecosystem package management for Python, R, C++, etc.
-- **IaC Tool**: terraform (v1.13.2) - infrastructure as code provisioning
+- **IaC Tool**: opentofu - open-source infrastructure as code (Terraform fork)
 - **Default User**: jovian (UID/GID mapped from host)
 
 ### Directory Structure
@@ -237,29 +237,32 @@ pixi run python script.py
 
 Pixi supports multiple languages including Python, R, C++, Rust, and more. It provides reproducible environments across different platforms.
 
-#### terraform - Infrastructure as Code
-The container includes `terraform` (v1.13.2) for infrastructure provisioning and management:
+#### opentofu - Infrastructure as Code
+The container includes OpenTofu, the open-source fork of Terraform maintained by the Linux Foundation:
 ```bash
-# Initialize a new Terraform working directory
-terraform init
+# Initialize a new OpenTofu working directory
+tofu init
 
 # Create an execution plan
-terraform plan
+tofu plan
 
 # Apply the changes required to reach the desired state
-terraform apply
+tofu apply
 
 # Destroy infrastructure
-terraform destroy
+tofu destroy
 
-# Format terraform files
-terraform fmt
+# Format configuration files
+tofu fmt
 
-# Validate terraform configuration
-terraform validate
+# Validate configuration
+tofu validate
+
+# Show version
+tofu version
 ```
 
-Terraform enables you to safely and predictably create, change, and improve infrastructure. It works with all major cloud providers (AWS, Azure, GCP, etc.).
+OpenTofu is a drop-in replacement for Terraform, supporting the same HCL configuration language and providers. It's community-driven and ensures infrastructure as code remains truly open-source.
 
 ## Known Limitations
 

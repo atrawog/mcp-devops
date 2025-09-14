@@ -43,7 +43,7 @@ RUN pacman -Syu --noconfirm && \
     foot \
     just \
     pixi \
-    terraform \
+    opentofu \
     neovim \
     openssh \
     rsync \
