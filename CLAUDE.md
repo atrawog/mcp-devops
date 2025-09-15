@@ -41,6 +41,7 @@ just up
 - **Task Runner**: just (v1.42.4) - command runner for project automation
 - **Package Manager**: pixi (v0.54.2) - conda-ecosystem package management for Python, R, C++, etc.
 - **IaC Tool**: opentofu - open-source infrastructure as code (Terraform fork)
+- **Cloud CLI**: scaleway-cli - Scaleway cloud services management
 - **Default User**: jovian (UID/GID mapped from host)
 
 ### Directory Structure
@@ -299,6 +300,31 @@ tofu version
 ```
 
 OpenTofu is a drop-in replacement for Terraform, supporting the same HCL configuration language and providers. It's community-driven and ensures infrastructure as code remains truly open-source.
+
+#### Scaleway CLI - Cloud Management
+The container includes the Scaleway CLI for managing Scaleway cloud resources:
+```bash
+# View CLI version
+scw version
+
+# Initialize configuration
+scw init
+
+# List instances
+scw instance server list
+
+# Create a new instance
+scw instance server create type=DEV1-S zone=fr-par-1 image=ubuntu_jammy
+
+# Manage object storage
+scw object bucket list
+scw object bucket create name=my-bucket
+
+# Manage Kubernetes clusters
+scw k8s cluster list
+```
+
+The Scaleway CLI provides comprehensive access to all Scaleway services including compute, storage, databases, Kubernetes, and more.
 
 ## Known Limitations
 

@@ -83,6 +83,7 @@ services:
 - **just** (v1.42.4) - Command runner for project automation
 - **pixi** (v0.54.2) - Cross-platform package management (conda ecosystem)
 - **opentofu** - Open-source infrastructure as code (Terraform fork)
+- **scaleway-cli** - Scaleway cloud services management tool
 - **Docker** - With automatic GID synchronization for socket access
 - **Git** - Version control with full configuration support
 
@@ -165,6 +166,11 @@ just clean                # Remove container and image
    tofu init
    tofu plan
    tofu apply
+
+   # Cloud management with Scaleway CLI
+   scw init           # Configure credentials
+   scw instance server list  # List instances
+   scw k8s cluster list     # List Kubernetes clusters
 
    # Task automation with just
    just test

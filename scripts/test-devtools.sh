@@ -36,7 +36,11 @@ docker run --rm mcp-devops:latest bash -c '
     claude --version 2>/dev/null || echo "Claude CLI not found in system path"
     echo ""
 
-    echo "6. Testing as jovian user:"
+    echo "6. Scaleway CLI:"
+    scw version 2>/dev/null || echo "Scaleway CLI not found"
+    echo ""
+
+    echo "7. Testing as jovian user:"
     su - jovian -c "
         echo \"  just: $(just --version)\"
         echo \"  pixi: $(pixi --version)\"
@@ -44,6 +48,7 @@ docker run --rm mcp-devops:latest bash -c '
         echo \"  node: $(node --version)\"
         echo \"  npm: $(npm --version)\"
         echo \"  claude: $(claude --version 2>/dev/null || echo 'not found')\"
+        echo \"  scaleway: $(scw version 2>/dev/null || echo 'not found')\"
         echo \"  Testing aliases:\"
         echo \"    cl alias: $(type cl 2>/dev/null | head -1 || echo 'not found')\"
         echo \"    clc alias: $(type clc 2>/dev/null | head -1 || echo 'not found')\"
@@ -52,12 +57,13 @@ docker run --rm mcp-devops:latest bash -c '
     "
     echo ""
 
-    echo "7. Available commands:"
+    echo "8. Available commands:"
     echo "  just: $(which just)"
     echo "  pixi: $(which pixi)"
     echo "  opentofu: $(which tofu 2>/dev/null || which opentofu)"
     echo "  node: $(which node)"
     echo "  npm: $(which npm)"
+    echo "  scaleway: $(which scw)"
 '
 
 echo ""
@@ -66,5 +72,6 @@ echo "Development tools installed and verified:"
 echo "  • just (task runner)"
 echo "  • pixi (package manager)"
 echo "  • opentofu (IaC tool)"
+echo "  • scaleway-cli (Scaleway cloud management)"
 echo "  • nodejs & npm (JavaScript runtime & package manager)"
 echo "  • claude (Claude CLI with aliases)"

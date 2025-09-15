@@ -44,6 +44,7 @@ RUN pacman -Syu --noconfirm && \
     just \
     pixi \
     opentofu \
+    scaleway-cli \
     nodejs \
     npm \
     neovim \
